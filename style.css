@@ -14,7 +14,7 @@ button {
 }
 
 button:hover {
-    background-color: #fff !important;
+    background-color: #d5d2d2 !important;
     color: #000 !important;
 }
 
@@ -124,7 +124,7 @@ header .search input {
 }
 
 .container .table .note-body {
-    display: none;
+    display: none;  /* Hide the note body in the note title block */
 }
 
 .container .table table,
@@ -144,8 +144,8 @@ header .search input {
     text-align: center;
 }
 
-.container .table table .btcellv,
-.container .table table .btcelld {
+.container .table table .btnView,
+.container .table table .btnDelete {
     text-align: center;
 }
 
@@ -155,19 +155,17 @@ header .search input {
     text-overflow: ellipsis;
 }
 
-.container .table table .btcellv button {
+.container .table table .btnView button {
     background-color: #06612f;
     color: #fff;
 }
 
-.container .table table .btcelld button {
+.container .table table .btnDelete button {
     background-color: #810404;
     color: #fff;
 }
 
-
 @media(max-width: 600px) {
-
     header {
         flex-direction: column;
     }
