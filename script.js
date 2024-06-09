@@ -4,7 +4,8 @@ var form = document.getElementById('add-frm');
 var items = document.getElementById('items');
 var ntitle = document.getElementById('n-title');
 var nbody = document.getElementById('n-body');
-var table = document.getElementById('tbl-div')
+var table = document.getElementById('tbl-div');
+var search = document.getElementById('srch');
 
 var noteCount = 0;
 var newNote = '';
@@ -12,7 +13,9 @@ var newNote = '';
 
 // ----------------------------------------------------------------Events------------------------------------------------------------------
 window.onload = updateTable;
+
 form.addEventListener('submit', addNote);
+search.addEventListener('keyup', searchNote);
 
 
 // ---------------------------------------------------------------Functions----------------------------------------------------------------
@@ -25,8 +28,7 @@ function addNote(e) {
     // Validate inputs
     if (ntitle.value == '' || nbody.value == '') {
         alert("Please fill all fields!");
-    }
-    else {
+    } else {
         // Create a new note record
 
         // New tr
@@ -73,15 +75,36 @@ function addNote(e) {
     }
 }
 
-// ------------------Update Table------------------
+// -----------------Update Table------------------
 function updateTable() {
     // Display the table when notes get added
     if (noteCount > 0) {
         table.style.display = '';
         items.appendChild(newNote);
-
-    }
-    else {
+    } else {
         table.style.display = 'none';
     }
+}
+
+// ------------------Search Notes------------------
+function searchNote(e){
+    // Text to lower case
+    var searchTxt = e.target.value.toLowerCase();
+
+    // Get list
+    var list = items.getElementsByClassName('item');
+
+    // Convert to an array
+    var listArr = Array.from(list);
+    listArr.forEach(function(item){
+        // Get title
+        var noteTitle = item.firstChild.textContent;
+        // Match
+        if(noteTitle.toLowerCase().indexOf(searchTxt) != -1){
+            item.style.display = '';
+        }
+        else{
+            item.style.display = 'none';
+        }
+    });
 }
