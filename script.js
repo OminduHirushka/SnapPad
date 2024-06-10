@@ -6,17 +6,23 @@ var ntitle = document.getElementById('n-title');
 var nbody = document.getElementById('n-body');
 var table = document.getElementById('tbl-div');
 var search = document.getElementById('srch');
+var rst = document.getElementById('reset');
 
 var noteCount = 0;
 var newNote = '';
-
+var isUpdate = false;
+var record = '';
+var note = '';
+var body = '';
 
 // ----------------------------------------------------------------Events------------------------------------------------------------------
 window.onload = updateTable;
 
 form.addEventListener('submit', addNote);
 search.addEventListener('keyup', searchNote);
-
+items.addEventListener('click', removeNote);
+items.addEventListener('click', viewNote);
+rst.addEventListener('click', reset);
 
 // ---------------------------------------------------------------Functions----------------------------------------------------------------
 
@@ -73,6 +79,9 @@ function addNote(e) {
         // Add or Update the note of the table
         updateTable();
     }
+
+    // Reset all
+    resetAll();
 }
 
 // -----------------Update Table------------------
@@ -80,15 +89,26 @@ function updateTable() {
     // Display the table when notes get added
     if (noteCount > 0) {
         table.style.display = '';
-        items.appendChild(newNote);
+
+        if (isUpdate) {
+            note.firstChild.textContent = ntitle.value;
+            note.lastChild.textContent = nbody.value;
+
+            // Reset update and notecount
+            isUpdate = false;
+            noteCount--;
+        } else {
+            // Add a new note
+            items.appendChild(newNote);
+        }
     } else {
         table.style.display = 'none';
     }
 }
 
 // ------------------Search Notes------------------
-function searchNote(e){
-    // Text to lower case
+function searchNote(e) {
+    // Text to lowercase
     var searchTxt = e.target.value.toLowerCase();
 
     // Get list
@@ -96,15 +116,53 @@ function searchNote(e){
 
     // Convert to an array
     var listArr = Array.from(list);
-    listArr.forEach(function(item){
+    listArr.forEach(function (item) {
         // Get title
         var noteTitle = item.firstChild.textContent;
+
         // Match
-        if(noteTitle.toLowerCase().indexOf(searchTxt) != -1){
+        if (noteTitle.toLowerCase().indexOf(searchTxt) != -1) {
             item.style.display = '';
-        }
-        else{
+        } else {
             item.style.display = 'none';
         }
     });
+}
+
+// ------------------Remove Notes------------------
+function removeNote(e) {
+    if (e.target.id === 'dlt') {
+        if (confirm("Are you sure to Delete this Note?")) {
+            // Delete note
+            var tr = e.target.parentElement.parentElement;
+            items.removeChild(tr);
+
+            // Update table
+            noteCount--;
+            if (noteCount === 0) {
+                updateTable();
+            }
+        }
+    }
+}
+
+// ------------------View Notes------------------
+function viewNote(e) {
+    if (e.target.id === 'vw') {
+        // Get the element values & update input fields
+        record = e.target.parentElement.parentElement;
+        note = record.firstChild;
+        ntitle.value = note.firstChild.textContent;
+        nbody.value = note.lastChild.textContent;
+        isUpdate = true;
+    }
+}
+
+// ------------------Rsest------------------
+function reset() {
+    ntitle.value = '';
+    nbody.value = '';
+    isUpdate = false;
+    newNote = '';
+    view = '';
 }
